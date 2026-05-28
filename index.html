@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estimasi Biaya Kegiatan Mahasiswa</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
+        .container { max-width: 600px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .identity { background: #e3faf2; padding: 15px; border-radius: 6px; margin-bottom: 20px; border-left: 5px solid #20c997; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input, select, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
+        button { background-color: #0078d4; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        button:hover { background-color: #005a9e; }
+        .result { margin-top: 25px; padding: 15px; background: #f0f4f8; border-radius: 4px; display: none; white-space: pre-wrap; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="identity">
+        <h3>Identitas Praktikum</h3>
+        <p><strong>Nama Mahasiswa:</strong> Adinda Arista</p>
+        <p><strong>Mata Kuliah:</strong> Praktikum Komputasi Awan & Serverless</p>
+        <p><strong>Layanan Azure yang Digunakan:</strong> Azure Static Web Apps, Azure Functions, Azure App Service, Azure Container Apps</p>
+    </div>
+
+    <h2>Kalkulator Estimasi Biaya Konsumsi</h2>
+    <form id="calcForm">
+        <label for="jumlah">Jumlah Peserta:</label>
+        <input type="number" id="jumlah" min="1" placeholder="Contoh: 40" required>
+
+        <label for="jenis">Jenis Konsumsi:</label>
+        <select id="jenis">
+            <option value="snack">Snack (Rp15.000)</option>
+            <option value="makan">Makan (Rp30.000)</option>
+            <option value="lengkap">Lengkap (Rp45.000)</option>
+        </select>
+
+        <button type="button" onclick="hitungBiaya()">Hitung Estimasi</button>
+    </form>
+
+    <div id="resultBox" class="result"></div>
+</div>
+
+<script>
+    async function hitungBiaya() {
+        const jumlah = document.getElementById('jumlah').value;
+        const jenis = document.getElementById('jenis').value;
+        const resultBox = document.getElementById('resultBox');
+
+        // GANTI URL DI BAWAH INI DENGAN URL FUNCTION ANDA YANG DIALURKAN DARI LANGKAH 1
+        const apiUrl = `https://func-serverless-047.azurewebsites.net/api/HttpEstimasi?jumlah=${jumlah}&jenis=${jenis}`;
+
+        try {
+            resultBox.style.display = "block";
+            resultBox.innerText = "Memproses estimasi...";
+            
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            
+            resultBox.innerText = JSON.stringify(data, null, 2);
+        } catch (error) {
+            resultBox.innerText = "Gagal mengambil data dari API backend Azure Functions.";
+        }
+    }
+</script>
+</body>
+</html>
