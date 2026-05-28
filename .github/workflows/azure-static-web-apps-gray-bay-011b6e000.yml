@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
           lfs: false
@@ -28,9 +28,10 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           ###### Repository/Build Configurations ######
-          app_location: "/"      
-          api_location: ""        # Kosongkan karena API kita terpisah
-          output_location: ""     # WAJIB KOSONG: Biarkan Azure otomatis mendeteksi HTML murni kamu
+          app_location: "/"       # Lokasi root folder file index.html
+          api_location: ""        # Kosongkan karena API dipisah
+          output_location: "/"    # Arahkan langsung ke root untuk HTML murni
+          skip_app_build: true    # UTAMA: Paksa TRUE agar Azure langsung upload tanpa proses compile yang bikin error!
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
