@@ -28,9 +28,9 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           ###### Repository/Build Configurations ######
-          app_location: "/"       # Lokasi file index.html Anda
-          api_location: ""        # Kosongkan karena API dipisah
-          output_location: "/"    # Untuk HTML murni, samakan dengan app_location agar langsung dibaca statis
+          app_location: "/"       # Lokasi file tempat index.html berada
+          api_location: ""        # Kosongkan karena API kita terpisah
+          output_location: ""     # WAJIB KOSONG: Biarkan Azure otomatis mendeteksi HTML murni kamu
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
