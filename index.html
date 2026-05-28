@@ -3,65 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estimasi Biaya Kegiatan Mahasiswa</title>
+    <title>Informasi Kegiatan Mahasiswa</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
-        .container { max-width: 600px; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .identity { background: #e3faf2; padding: 15px; border-radius: 6px; margin-bottom: 20px; border-left: 5px solid #20c997; }
-        label { display: block; margin-top: 15px; font-weight: bold; }
-        input, select, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; }
-        button { background-color: #0078d4; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #f3f2f1; }
+        .card { background: white; padding: 25px; border-radius: 8px; max-width: 500px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin: auto; }
+        h2 { color: #106ebe; margin-top: 0; }
+        .info-kegiatan { background: #f3f2f1; padding: 12px; border-radius: 4px; margin-bottom: 20px; font-size: 14px; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #323130; }
+        input, select, button { width: 100%; padding: 10px; margin-top: 6px; border-radius: 4px; border: 1px solid #a19f9d; box-sizing: border-box; }
+        button { background-color: #106ebe; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 20px; }
         button:hover { background-color: #005a9e; }
-        .result { margin-top: 25px; padding: 15px; background: #f0f4f8; border-radius: 4px; display: none; white-space: pre-wrap; font-family: monospace; }
+        .output { margin-top: 20px; padding: 15px; background: #201f1e; color: #00ff00; border-radius: 4px; display: none; white-space: pre-wrap; font-family: 'Courier New', Courier, monospace; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="identity">
-        <h3>Identitas Praktikum</h3>
-        <p><strong>Nama Mahasiswa:</strong> Adinda Arista</p>
-        <p><strong>Mata Kuliah:</strong> Praktikum Komputasi Awan & Serverless</p>
-        <p><strong>Layanan Azure yang Digunakan:</strong> Azure Static Web Apps, Azure Functions, Azure App Service, Azure Container Apps</p>
+<div class="card">
+    <h2>Informasi Kegiatan Mahasiswa</h2>
+    <div class="info-kegiatan">
+        <p><strong>Nama Kegiatan:</strong> Seminar Nasional Komputasi Awan 2026</p>
+        <p><strong>Penyelenggara:</strong> Himpunan Mahasiswa Teknologi Informasi</p>
+        <p><strong>Status Layanan:</strong> Terhubung ke Azure Functions Backend</p>
     </div>
 
-    <h2>Kalkulator Estimasi Biaya Konsumsi</h2>
-    <form id="calcForm">
-        <label for="jumlah">Jumlah Peserta:</label>
-        <input type="number" id="jumlah" min="1" placeholder="Contoh: 40" required>
+    <hr>
 
-        <label for="jenis">Jenis Konsumsi:</label>
-        <select id="jenis">
-            <option value="snack">Snack (Rp15.000)</option>
-            <option value="makan">Makan (Rp30.000)</option>
-            <option value="lengkap">Lengkap (Rp45.000)</option>
-        </select>
+    <h3>Kalkulator Estimasi Konsumsi</h3>
+    <label for="jumlah">Jumlah Peserta:</label>
+    <input type="number" id="jumlah" value="40" min="1">
 
-        <button type="button" onclick="hitungBiaya()">Hitung Estimasi</button>
-    </form>
+    <label for="jenis">Jenis Konsumsi:</label>
+    <select id="jenis">
+        <option value="snack">Snack (Rp15.000)</option>
+        <option value="makan">Makan (Rp30.000)</option>
+        <option value="lengkap">Lengkap (Rp45.000)</option>
+    </select>
 
-    <div id="resultBox" class="result"></div>
+    <button onclick="hitungEstimasi()">Kirim Permintaan API</button>
+
+    <div id="jsonOutput" class="output"></div>
 </div>
 
 <script>
-    async function hitungBiaya() {
-        const jumlah = document.getElementById('jumlah').value;
-        const jenis = document.getElementById('jenis').value;
-        const resultBox = document.getElementById('resultBox');
+    async function hitungEstimasi() {
+        const jm = document.getElementById('jumlah').value;
+        const jn = document.getElementById('jenis').value;
+        const outBox = document.getElementById('jsonOutput');
+        
+        outBox.style.display = "block";
+        outBox.innerText = "Memproses data via Azure Functions...";
 
-        // GANTI URL DI BAWAH INI DENGAN URL FUNCTION ANDA YANG DIALURKAN DARI LANGKAH 1
-        const apiUrl = `https://func-serverless-047.azurewebsites.net/api/HttpEstimasi?jumlah=${jumlah}&jenis=${jenis}`;
+        // JALUR URL BACKEND AZURE FUNCTIONS
+        const url = `https://func-serverless-047-b9gqehgcc2fbgsag.eastasia-01.azurewebsites.net/api/HttpEstimasi?jumlah=${jm}&jenis=${jn}`;
 
         try {
-            resultBox.style.display = "block";
-            resultBox.innerText = "Memproses estimasi...";
-            
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-            
-            resultBox.innerText = JSON.stringify(data, null, 2);
+            const response = await fetch(url);
+            const jsonResult = await response.json();
+            outBox.innerText = JSON.stringify(jsonResult, null, 2);
         } catch (error) {
-            resultBox.innerText = "Gagal mengambil data dari API backend Azure Functions.";
+            outBox.innerText = "Error: Gagal terhubung ke endpoint API Azure.";
         }
     }
 </script>
