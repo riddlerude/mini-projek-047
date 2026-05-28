@@ -24,14 +24,14 @@ jobs:
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GRAY_BAY_011B6E000 }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_TOKEN }} # Menggunakan nama rahasia baru yang ringkas
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           ###### Repository/Build Configurations ######
-          app_location: "/"       # Lokasi root folder file index.html
+          app_location: "/"       # Lokasi file index.html berada
           api_location: ""        # Kosongkan karena API dipisah
-          output_location: "/"    # Arahkan langsung ke root untuk HTML murni
-          skip_app_build: true    # UTAMA: Paksa TRUE agar Azure langsung upload tanpa proses compile yang bikin error!
+          output_location: "/"    # Langsung arahkan ke root untuk HTML murni
+          skip_app_build: true    # Lewati proses build otomatis agar langsung deploy file mentah
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
@@ -43,5 +43,5 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GRAY_BAY_011B6E000 }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_TOKEN }} # Menggunakan nama rahasia baru yang ringkas
           action: "close"
